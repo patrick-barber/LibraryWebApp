@@ -1,0 +1,114 @@
+﻿@model MvcLibrary.Models.BookCategoryViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>ALL BOOKS</h1>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-controller="Books" asp-action="Index" method="get">
+    <p>
+        <label>Category: 
+        <select asp-for="Category" asp-items="Model.Categories">
+            <option value="">All</option>
+        </select>
+        </label>
+
+        <label>Title: <input type="text" asp-for="TitleSearchString" /></label>
+        <label>Author: <input type="text" asp-for="AuthorSearchString" /></label>
+        <label>Availability: 
+            <select asp-for="Availability" asp-items="Model.AvailabilityOptions">
+            <option value="">All</option>
+        </select>
+        </label>
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Books![0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Books![0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Books![0].Author)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Books![0].CoverImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Books![0].Publisher)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Books![0].PublicationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Books![0].Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Books![0].ISBN)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Books![0].PageCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Books![0].IsAvailable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Books![0].Rating)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Books!) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CoverImage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Publisher)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PublicationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ISBN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PageCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsAvailable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rating)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
