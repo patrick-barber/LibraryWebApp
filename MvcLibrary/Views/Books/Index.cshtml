@@ -1,4 +1,6 @@
 ﻿@model MvcLibrary.Models.BookCategoryViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
 
 @{
     ViewData["Title"] = "Index";
@@ -104,9 +106,28 @@
                 @Html.DisplayFor(modelItem => item.Rating)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    @if (item.IsAvailable)
+                    {
+                        <a asp-action="CheckOut" asp-route-id="@item.Id">Check Out</a>
+                    }
+                    else
+                    {
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <a asp-action="CheckIn" asp-route-id="@item.Id">Check In</a>
+                        }
+                        else
+                        {
+                            <p>Checked out</p>
+                        }
+                    }
+                    <a asp-action="Details" asp-route-id="@item.Id">| Details</a>
+                    <a asp-action="Rate" asp-route-id="@item.Id">| Rate</a>
+                    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">| Edit</a>   
+                        <a asp-action="Delete" asp-route-id="@item.Id">| Delete</a>
+                    }
             </td>
         </tr>
 }

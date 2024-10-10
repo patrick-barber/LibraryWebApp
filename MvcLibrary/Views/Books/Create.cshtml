@@ -67,6 +67,8 @@
                 <input asp-for="Rating" class="form-control" />
                 <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
+            <input type="hidden" name="UserCheckedOut" value="@String.Empty" />
+            <input type="hidden" name="DueDate" value="@DateTime.Now" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

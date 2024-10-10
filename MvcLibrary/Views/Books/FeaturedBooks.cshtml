@@ -2,10 +2,12 @@
 
 @{
     ViewData["Title"] = "Featured Books";
-
 }
 
 <div class="text-center">
+    <h3>Welcome to the Barber Online Local Library!</h3>
+    <p>Please take a look at our featured books below.</p>
+    <br />
     <h1 class="display-4">Featured Books</h1>
     <table class="table">
         <thead>
@@ -26,6 +28,9 @@
             @foreach (var item in Model.Books!)
             {
                 <tr>
+                    <td>
+                        <img src="@Url.Content(item.CoverImage)" style="height:30px; width:30px" />
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Title)
                     </td>

@@ -24,60 +24,116 @@ public static class SeedData
             context.Book.AddRange(
                 new Book
                 {
-                    Title = "Huck finn",
-                    Description ="book about stuff",
-                    Author = "larry",
-                    CoverImage = "Img",
+                    Title = "To Kill a Mockingbird",
+                    Description = "A book about killing mockingbirds",
+                    Author = "Harper Lee",
+                    CoverImage = "~/Images/mockingbird.png",
                     Publisher = "Barber Inc",
                     PublicationDate = DateTime.Parse("1984-3-13"),
                     Category = "fiction",
-                    ISBN = 100,
+                    ISBN = 1,
                     PageCount = 69,
                     IsAvailable = true,
-                    Rating = 2
+                    Rating = 2,
+                    UserCheckedOut = null,
+                    DueDate = DateTime.Now
                 },
                 new Book
                 {
                     Title = "Troy Web",
                     Description = "Kick ass",
                     Author = "Jon",
-                    CoverImage = "Img2",
-                    Publisher = "Barber Inc",
+                    CoverImage = "~/Images/Meta.png",
+                    Publisher = "Troy Web Consulting",
                     PublicationDate = DateTime.Parse("1985-3-13"),
                     Category = "Non fiction",
-                    ISBN = 101,
+                    ISBN = 2,
                     PageCount = 68,
                     IsAvailable = true,
-                    Rating = 1
+                    Rating = 5,
+                    UserCheckedOut = null,
+                    DueDate = DateTime.Now
                 },
                 new Book
                 {
-                    Title = "UL",
+                    Title = "ULS",
                     Description = "UL Solutions",
                     Author = "Jenn",
-                    CoverImage = "Img",
+                    CoverImage = "~/Images/ULS.png",
                     Publisher = "G Books",
                     PublicationDate = DateTime.Parse("1982-3-13"),
                     Category = "biography",
-                    ISBN = 102,
-                    PageCount = 67,
+                    ISBN = 3,
+                    PageCount = 670,
                     IsAvailable = true,
-                    Rating = 3
+                    Rating = 3,
+                    UserCheckedOut = null,
+                    DueDate = DateTime.Now
                 },
                 new Book
                 {
                     Title = "Meta",
                     Description = "Facebook",
                     Author = "Mark Zuck",
-                    CoverImage = "Img",
-                    Publisher = "ABC",
+                    CoverImage = "~/Images/Meta.png",
+                    Publisher = "Meta",
                     PublicationDate = DateTime.Parse("1981-3-13"),
-                    Category = "Fiction",
-                    ISBN = 103,
+                    Category = "fiction",
+                    ISBN = 4,
                     PageCount = 70,
                     IsAvailable = true,
-                    Rating = 4
-                }
+                    Rating = 2,
+                    UserCheckedOut = null,
+                    DueDate = DateTime.Now
+                },
+                 new Book
+                 {
+                     Title = "Instagram",
+                     Description = "a book about instagram",
+                     Author = "Mark Zuck",
+                     CoverImage = "~/Images/Meta.png",
+                     Publisher = "Meta",
+                     PublicationDate = DateTime.Parse("1981-3-13"),
+                     Category = "fiction",
+                     ISBN = 5,
+                     PageCount = 77,
+                     IsAvailable = true,
+                     Rating = 1,
+                     UserCheckedOut = null,
+                     DueDate = DateTime.Now
+                 },
+                  new Book
+                  {
+                      Title = "Threads",
+                      Description = "Meta",
+                      Author = "Mark Zuck",
+                      CoverImage = "~/Images/Meta.png",
+                      Publisher = "Meta",
+                      PublicationDate = DateTime.Parse("1981-3-13"),
+                      Category = "fiction",
+                      ISBN = 5,
+                      PageCount = 700,
+                      IsAvailable = true,
+                      Rating = 3,
+                      UserCheckedOut = null,
+                      DueDate = DateTime.Now
+                  },
+                  new Book
+                  {
+                      Title = "TikTok",
+                      Description = "a book about that app everyone is addicted to",
+                      Author = "Anonymous",
+                      CoverImage = "~/Images/tiktok.png",
+                      Publisher = "TikTok Inc",
+                      PublicationDate = DateTime.Parse("1981-3-13"),
+                      Category = "non fiction",
+                      ISBN = 6,
+                      PageCount = 999,
+                      IsAvailable = true,
+                      Rating = 5,
+                      UserCheckedOut = null,
+                      DueDate = DateTime.Now
+                  }
             );
             context.SaveChanges();
         }

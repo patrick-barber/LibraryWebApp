@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 using MvcLibrary.Data;
+using MvcLibrary.Migrations;
 using MvcLibrary.Models;
 
 namespace MvcLibrary.Controllers
@@ -26,6 +27,7 @@ namespace MvcLibrary.Controllers
         }
 
         // GET: Books
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Index(string category, string TitleSearchString, string AuthorSearchString, string Availability)
         {
             if (_context.Book == null)
@@ -88,6 +90,7 @@ namespace MvcLibrary.Controllers
             return View(bookCategoryVM);
         }
 
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> FeaturedBooks()
         {
             if (_context.Book == null)
@@ -97,7 +100,7 @@ namespace MvcLibrary.Controllers
             var books = from b in _context.Book
                         select b;
 
-            var booksList = await books.ToListAsync();
+            var booksList = await books.Where(book => book.IsAvailable).ToListAsync();
 
             // Shuffle the list and take 5 random books
             var random = new Random();
@@ -110,10 +113,12 @@ namespace MvcLibrary.Controllers
             };
    
             return View(featuredBooksVM);
-        }  
+        }
 
-            // GET: Books/Details/5
-            public async Task<IActionResult> Details(int? id)
+
+        // GET: Books/Details/5
+        [Authorize(Roles = "Admin, User")]
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -131,6 +136,7 @@ namespace MvcLibrary.Controllers
         }
 
         // GET: Books/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -141,7 +147,8 @@ namespace MvcLibrary.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Author,CoverImage,Publisher,PublicationDate,Category,ISBN,PageCount,IsAvailable,Rating")] Book book)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Author,CoverImage,Publisher,PublicationDate,Category,ISBN,PageCount,IsAvailable,Rating,UserCheckedOut,DueDate")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -153,6 +160,7 @@ namespace MvcLibrary.Controllers
         }
 
         // GET: Books/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -173,7 +181,8 @@ namespace MvcLibrary.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Author,CoverImage,Publisher,PublicationDate,Category,ISBN,PageCount,IsAvailable,Rating")] Book book)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Author,CoverImage,Publisher,PublicationDate,Category,ISBN,PageCount,IsAvailable,Rating,UserCheckedOut,DueDate")] Book book)
         {
             if (id != book.Id)
             {
@@ -204,6 +213,7 @@ namespace MvcLibrary.Controllers
         }
 
         // GET: Books/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -222,6 +232,7 @@ namespace MvcLibrary.Controllers
         }
 
         // POST: Books/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id, bool notUsed)
@@ -234,6 +245,159 @@ namespace MvcLibrary.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Books/CheckOut/5
+        [Authorize(Roles = "Admin, User")]
+        public async Task<IActionResult> CheckOut(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var book = await _context.Book.FindAsync(id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            return View(book);
+        }
+
+        [Authorize(Roles = "Admin, User")]
+        [HttpPost, ActionName("CheckOut")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CheckOut(int id)
+        {
+            var book = await _context.Book.FindAsync(id);
+            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+
+            if (book != null)
+            {
+                try
+                {
+                    book.IsAvailable = false;
+                    book.UserCheckedOut = currentUser.Identity.Name;
+                    book.DueDate = DateTime.Now.AddDays(5);
+                    _context.Update(book);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BookExists(book.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Books/CheckIn/5
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CheckIn(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var book = await _context.Book
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            return View(book);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost, ActionName("CheckIn")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CheckIn(int id)
+        {
+            var book = await _context.Book.FindAsync(id);
+
+            if (book != null)
+            {
+                try
+                {
+                    book.IsAvailable = true;
+                    book.UserCheckedOut = string.Empty;
+                    book.DueDate = DateTime.Now;
+                    _context.Update(book);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BookExists(book.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Books/Rate/5
+        [Authorize(Roles = "Admin,User")]
+        public async Task<IActionResult> Rate(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var book = await _context.Book
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            return View(book);
+        }
+
+        [Authorize(Roles = "Admin, User")]
+        [HttpPost, ActionName("Rate")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Rate(int id, int rating)
+        {
+            var book = await _context.Book.FindAsync(id);
+
+            if (book != null)
+            {
+                try
+                {
+                    book.Rating = rating;
+                    _context.Update(book);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BookExists(book.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(book);
         }
 
         private bool BookExists(int id)

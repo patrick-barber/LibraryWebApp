@@ -7,14 +7,14 @@ using MvcLibrary.Data;
 using MvcLibrary.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-//builder.Services.AddDbContext<MvcLibraryContext>(options =>
-    //options.UseSqlServer(builder.Configuration.GetConnectionString("MvcLibraryContext") ?? throw new InvalidOperationException("Connection string 'MvcLibraryContext' not found.")));
 
 builder.Services.AddDbContext<MvcLibraryContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("MvcLibraryContext")));
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
     .AddEntityFrameworkStores<MvcLibraryContext>();
+
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Password settings.
@@ -41,14 +41,12 @@ builder.Services.ConfigureApplicationCookie(options =>
     // Cookie settings
     options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-
-    options.LoginPath = "/Identity/Account/Login";
-    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
     options.SlidingExpiration = true;
 });
+
 builder.Services.AddRazorPages();
-
-
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -63,11 +61,15 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    // Ideally use these for staging/production environment
+    app.UseExceptionHandler("/Error");
+    app.UseStatusCodePagesWithReExecute("/Error/{0}");
 }
 
 app.UseHttpsRedirection();
@@ -77,14 +79,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-//app.MapDefaultControllerRoute();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Books}/{action=FeaturedBooks}/{id?}");
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapRazorPages();
-});
 
 app.Run();

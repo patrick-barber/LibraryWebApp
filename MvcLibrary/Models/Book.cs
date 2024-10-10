@@ -49,5 +49,10 @@ namespace MvcLibrary.Models
 
         [Range(1, 5)]
         public int Rating { get; set; }
+
+        [Display(Name = "User checked out")]
+        public string? UserCheckedOut { get; set; }
+        [Display(Name = "Due date")]
+        public DateTime? DueDate { get; set; }
     }
 }
