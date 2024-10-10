@@ -13,13 +13,16 @@
         <thead>
             <tr>
                 <th>
+                    @Html.DisplayNameFor(model => model.Books![0].CoverImage)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Books![0].Title)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Books![0].Description)
+                    @Html.DisplayNameFor(model => model.Books![0].Author)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Books![0].Author)
+                    @Html.DisplayNameFor(model => model.Books![0].Description)
                 </th>
                 <th></th>
             </tr>
@@ -35,10 +38,10 @@
                         @Html.DisplayFor(modelItem => item.Title)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Description)
+                        @Html.DisplayFor(modelItem => item.Author)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Author)
+                        @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a>

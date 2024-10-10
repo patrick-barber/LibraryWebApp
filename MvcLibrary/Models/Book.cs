@@ -6,15 +6,15 @@ namespace MvcLibrary.Models
     {
         public int Id { get; set; }
 
-        [StringLength(60, MinimumLength = 3)]
+        [StringLength(120, MinimumLength = 3)]
         [Required]
         public string? Title { get; set; }
 
-        [StringLength(120, MinimumLength = 3)]
+        [StringLength(240, MinimumLength = 3)]
         [Required]
         public string? Description { get; set; }
 
-        [StringLength(20, MinimumLength = 3)]
+        [StringLength(120, MinimumLength = 3)]
         [Required]
         public string? Author { get; set; }
 
@@ -22,7 +22,7 @@ namespace MvcLibrary.Models
         [Display(Name = "Cover Image")]
         public string? CoverImage { get; set; }
 
-        [StringLength(20, MinimumLength = 3)]
+        [StringLength(120, MinimumLength = 3)]
         [Required]
         public string? Publisher { get; set; }
 
@@ -30,11 +30,11 @@ namespace MvcLibrary.Models
         [DataType(DataType.Date)]
         public DateTime PublicationDate { get; set; }
 
-        [StringLength(20, MinimumLength = 3)]
+        [StringLength(120, MinimumLength = 3)]
         [Required]
         public string? Category { get; set; }
 
-        [Range(1, 100)]
+        [Range(1, 1000)]
         [Required]
         public int ISBN { get; set; }
 
