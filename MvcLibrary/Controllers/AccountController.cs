@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 using MvcLibrary.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace MvcLibrary.Controllers
 {
@@ -16,19 +19,32 @@ namespace MvcLibrary.Controllers
         //signInManager will hold the SignInManager instance
         private readonly SignInManager<ApplicationUser> signInManager;
 
+        private readonly RoleManager<ApplicationRole> roleManager;
+
         //Both UserManager and SignInManager services are injected into the AccountController
         //using constructor injection
         public AccountController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            RoleManager<ApplicationRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.roleManager = roleManager;
         }
 
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            var options = new List<string>
+            {
+                "User",
+                "Librarian"
+            };
+            var registerVm = new RegisterViewModel
+            {
+                RoleOptions = new SelectList(options)
+            };
+            return View(registerVm);
         }
 
         [HttpPost]
@@ -53,6 +69,7 @@ namespace MvcLibrary.Controllers
                 // SignInManager and redirect to index action of HomeController
                 if (result.Succeeded)
                 {
+                    await CreateOrEditRole(user, model);
                     await signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("FeaturedBooks", "Books");
                 }
@@ -148,6 +165,36 @@ namespace MvcLibrary.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        private async Task CreateOrEditRole(ApplicationUser user, RegisterViewModel model)
+        {
+            var role = new ApplicationRole
+            {
+                Name = model.RoleName,
+                Description = "Customer"
+            };
+
+            if (model.RoleName.Equals("Librarian"))
+            {
+                role.Name = "Admin";
+                role.Description = "Librarian";
+            }
+
+            bool roleExists = await roleManager.RoleExistsAsync(role.Name);
+            if (roleExists)
+            {
+                if (!await userManager.IsInRoleAsync(user, role.Name))
+                {
+                    //If User is not already in this role, then add the user
+                    await userManager.AddToRoleAsync(user, role.Name);
+                }
+            }
+            else // Create Role, add user to role
+            {
+                await roleManager.CreateAsync(role);
+                await userManager.AddToRoleAsync(user, role.Name);
+            }
         }
     }
 }

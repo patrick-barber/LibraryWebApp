@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 using System.ComponentModel.DataAnnotations;
 namespace MvcLibrary.Models
@@ -25,5 +26,11 @@ namespace MvcLibrary.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "Please select a Role")]
+        [Display(Name = "Role")]
+        public string RoleName { get; set; }
+
+        public SelectList? RoleOptions { get; set; }
     }
 }
