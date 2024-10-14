@@ -28,12 +28,17 @@ namespace MvcLibrary.Controllers
 
         // GET: Books
         [Authorize(Roles = "Admin, User")]
-        public async Task<IActionResult> Index(string category, string TitleSearchString, string AuthorSearchString, string Availability)
+        public async Task<IActionResult> Index(string sortOrder, string category, string TitleSearchString, string AuthorSearchString, string Availability)
         {
             if (_context.Book == null)
             {
                 return Problem("Entity set 'MvcLibraryContext.Book' is null.");
             }
+
+            // Set the current sorting order
+            ViewData["TitleSortParam"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["AuthorSortParam"] = sortOrder == "Author" ? "author_desc" : "Author";
+            ViewData["CurrentSort"] = sortOrder;
 
             // Use LINQ to get list of genres.
             IQueryable<string> categoryQuery = from b in _context.Book
@@ -73,6 +78,15 @@ namespace MvcLibrary.Controllers
                     //Return all books
                 }    
             }
+
+            // Sort based on sortOrder
+            books = sortOrder switch
+            {
+                "title_desc" => books.OrderByDescending(b => b.Title),
+                "Author" => books.OrderBy(b => b.Author),
+                "author_desc" => books.OrderByDescending(b => b.Author),
+                _ => books.OrderBy(b => b.Title),
+            };
 
             var options = new List<string>
             {

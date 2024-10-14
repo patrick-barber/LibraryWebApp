@@ -6,6 +6,20 @@
     ViewData["Title"] = "Index";
 }
 
+<style>
+    .table-header-link 
+    {
+        text-decoration: none; 
+        color: inherit; 
+        font-weight: bold; 
+    }
+    .table-header-link:hover 
+    {
+        text-decoration: none; 
+        color: inherit; 
+    }
+</style>
+
 <h1>ALL BOOKS</h1>
 <p>
     <a asp-action="Create">Create New</a>
@@ -34,13 +48,23 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Books![0].Title)
+                <a class="table-header-link" asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParam"]">Title
+                    @if (ViewData["CurrentSort"]?.ToString() == "" || ViewData["CurrentSort"]?.ToString() == "title_desc")
+                    {
+                        <span><i class="fa @(ViewData["CurrentSort"].ToString() == "title_desc" ? "fa-sort-down" : "fa-sort-up")"></i></span>
+                    }
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Books![0].Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Books![0].Author)
+                <a class="table-header-link" asp-action="Index" asp-route-sortOrder="@ViewData["AuthorSortParam"]">Author
+                    @if (ViewData["CurrentSort"]?.ToString() == "Author" || ViewData["CurrentSort"]?.ToString() == "author_desc")
+                    {
+                        <span><i class="fa @(ViewData["CurrentSort"].ToString() == "author_desc" ? "fa-sort-down" : "fa-sort-up")"></i></span>
+                    }
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Books![0].CoverImage)

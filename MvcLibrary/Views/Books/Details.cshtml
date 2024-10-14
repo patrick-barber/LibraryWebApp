@@ -96,6 +96,10 @@
     </dl>
 </div>
 <div>
+    @if (User.Identity.Name.Equals(Model.UserCheckedOut) && Model.DueDate <= DateTime.Now )
+    {
+        <p class="text-danger">Book is past due, please return.</p>
+    }
     @if (Model.IsAvailable)
     {
         <a asp-action="CheckOut" asp-route-id="@Model?.Id">Check Out</a>
