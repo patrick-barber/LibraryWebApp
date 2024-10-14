@@ -73,7 +73,7 @@ namespace MvcLibrary.Controllers
         [HttpGet]
         public async Task<IActionResult> EditRole(string roleId)
         {
-            //First Get the role information from the database
+            // First Get the role information from the database
             ApplicationRole? role = await _roleManager.FindByIdAsync(roleId);
             if (role == null)
             {
@@ -81,17 +81,14 @@ namespace MvcLibrary.Controllers
                 return View("Error");
             }
 
-            //Populate the EditRoleViewModel from the data retrived from the database
             var model = new EditRoleViewModel
             {
                 Id = role.Id,
                 RoleName = role.Name,
                 Description = role.Description,
                 Users = new List<string>()
-                // You can add other properties here if needed
             };
 
-            // Retrieve all the Users
             foreach (var user in _userManager.Users.ToList())
             {
                 // If the user is in this role, add the username to
@@ -102,7 +99,6 @@ namespace MvcLibrary.Controllers
                     model.Users.Add(user.UserName);
                 }
             }
-
             return View(model);
         }
 
@@ -122,12 +118,11 @@ namespace MvcLibrary.Controllers
                 {
                     role.Name = model.RoleName;
                     role.Description = model.Description;
-                    // Update other properties if needed
 
                     var result = await _roleManager.UpdateAsync(role);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("ListRoles"); // Redirect to the roles list
+                        return RedirectToAction("ListRoles");
                     }
 
                     foreach (var error in result.Errors)
@@ -138,9 +133,7 @@ namespace MvcLibrary.Controllers
                     return View(model);
                 }
             }
-
             return View(model);
-
         }
 
         [HttpPost]
@@ -155,14 +148,12 @@ namespace MvcLibrary.Controllers
             }
             else
             {
-                // Wrap the code in a try/catch block
                 try
                 {
                     var result = await _roleManager.DeleteAsync(role);
                     if (result.Succeeded)
                     {
-                        // Role deletion successful
-                        return RedirectToAction("ListRoles"); // Redirect to the roles list page
+                        return RedirectToAction("ListRoles"); 
                     }
 
                     foreach (var error in result.Errors)
@@ -232,7 +223,7 @@ namespace MvcLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUsersInRole(List<UserRoleViewModel> model, string roleId)
         {
-            //First check whether the Role Exists or not
+            // First check whether the Role Exists or not
             var role = await _roleManager.FindByIdAsync(roleId);
 
             if (role == null)
@@ -249,17 +240,17 @@ namespace MvcLibrary.Controllers
 
                 if (model[i].IsSelected && !(await _userManager.IsInRoleAsync(user, role.Name)))
                 {
-                    //If IsSelected is true and User is not already in this role, then add the user
+                    // If IsSelected is true and User is not already in this role, then add the user
                     result = await _userManager.AddToRoleAsync(user, role.Name);
                 }
                 else if (!model[i].IsSelected && await _userManager.IsInRoleAsync(user, role.Name))
                 {
-                    //If IsSelected is false and User is already in this role, then remove the user
+                    // If IsSelected is false and User is already in this role, then remove the user
                     result = await _userManager.RemoveFromRoleAsync(user, role.Name);
                 }
                 else
                 {
-                    //Don't do anything simply continue the loop
+                    // Don't do anything
                     continue;
                 }
 
@@ -285,10 +276,10 @@ namespace MvcLibrary.Controllers
         [HttpGet]
         public async Task<IActionResult> EditUser(string UserId)
         {
-            //First Fetch the User Details by UserId
+            // First Fetch the User Details by UserId
             var user = await _userManager.FindByIdAsync(UserId);
 
-            //Check if User Exists in the Database
+            // Check if User Exists in the Database
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with Id = {UserId} cannot be found";
@@ -301,7 +292,7 @@ namespace MvcLibrary.Controllers
             // GetRolesAsync returns the list of user Roles
             var userRoles = await _userManager.GetRolesAsync(user);
 
-            //Store all the information in the EditUserViewModel instance
+            // Store all the information in the EditUserViewModel instance
             var model = new EditUserViewModel
             {
                 Id = user.Id,
@@ -313,49 +304,47 @@ namespace MvcLibrary.Controllers
                 Roles = userRoles
             };
 
-            //Pass the Model to the View
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> EditUser(EditUserViewModel model)
         {
-            //First Fetch the User by Id from the database
+            // First Fetch the User by Id from the database
             var user = await _userManager.FindByIdAsync(model.Id);
 
-            //Check if the User Exists in the database
+            // Check if the User Exists in the database
             if (user == null)
             {
-                //If the User does not exists in the database, then return Not Found Error View
+                // If the User does not exists in the database, then return Not Found Error View
                 ViewBag.ErrorMessage = $"User with Id = {model.Id} cannot be found";
                 return View("NotFound");
             }
             else
             {
-                //If the User Exists, then proceed and update the data
+                // If the User Exists, then proceed and update the data
                 //Populate the user instance with the data from EditUserViewModel
                 user.Email = model.Email;
                 user.UserName = model.UserName;
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
 
-                //UpdateAsync Method will update the user data in the AspNetUsers Identity table
+                // UpdateAsync Method will update the user data in the AspNetUsers Identity table
                 var result = await _userManager.UpdateAsync(user);
 
                 if (result.Succeeded)
                 {
-                    //Once user data updated redirect to the ListUsers view
+                    // Once user data updated redirect to the ListUsers view
                     return RedirectToAction("ListUsers");
                 }
                 else
                 {
-                    //In case any error, stay in the same view and show the model validation error
+                    // In case any error, stay in the same view and show the model validation error
                     foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError("", error.Description);
                     }
                 }
-
                 return View(model);
             }
         }
@@ -363,7 +352,7 @@ namespace MvcLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string UserId)
         {
-            //First Fetch the User you want to Delete
+            // First Fetch the User you want to Delete
             var user = await _userManager.FindByIdAsync(UserId);
 
             if (user == null)
@@ -374,7 +363,7 @@ namespace MvcLibrary.Controllers
             }
             else
             {
-                //Delete the User Using DeleteAsync Method of UserManager Service
+                // Delete the User Using DeleteAsync Method of UserManager Service
                 var result = await _userManager.DeleteAsync(user);
 
                 if (result.Succeeded)
@@ -390,7 +379,6 @@ namespace MvcLibrary.Controllers
                         ModelState.AddModelError("", error.Description);
                     }
                 }
-
                 return View("ListUsers");
             }
         }
@@ -398,25 +386,25 @@ namespace MvcLibrary.Controllers
         [HttpGet]
         public async Task<IActionResult> ManageUserRoles(string UserId)
         {
-            //First Fetch the User Information from the Identity database by user Id
+            // First Fetch the User Information from the Identity database by user Id
             var user = await _userManager.FindByIdAsync(UserId);
 
             if (user == null)
             {
-                //handle if User Not Found in the Database
+                // handle if User Not Found in the Database
                 ViewBag.ErrorMessage = $"User with Id = {UserId} cannot be found";
                 return View("NotFound");
             }
 
-            //Store the UserId in the ViewBag which is required while updating the Data
-            //Store the UserName in the ViewBag which is used for displaying purpose
+            // Store the UserId in the ViewBag which is required while updating the Data
+            // Store the UserName in the ViewBag which is used for displaying purpose
             ViewBag.UserId = UserId;
             ViewBag.UserName = user.UserName;
 
-            //Create a List to Hold all the Roles Information
+            // Create a List to Hold all the Roles Information
             var model = new List<UserRolesViewModel>();
 
-            //Loop Through Each role and populate the model 
+            // Loop Through Each role and populate the model 
             foreach (var role in await _roleManager.Roles.ToListAsync())
             {
                 var userRolesViewModel = new UserRolesViewModel
@@ -426,7 +414,7 @@ namespace MvcLibrary.Controllers
                     Description = role.Description
                 };
 
-                //Check if the Role is already assigned to this user
+                // Check if the Role is already assigned to this user
                 if (await _userManager.IsInRoleAsync(user, role.Name))
                 {
                     userRolesViewModel.IsSelected = true;
@@ -436,10 +424,9 @@ namespace MvcLibrary.Controllers
                     userRolesViewModel.IsSelected = false;
                 }
 
-                //Add the userRolesViewModel to the model
+                // Add the userRolesViewModel to the model
                 model.Add(userRolesViewModel);
             }
-
             return View(model);
         }
 
@@ -454,10 +441,10 @@ namespace MvcLibrary.Controllers
                 return View("NotFound");
             }
 
-            //fetch the list of roles the specified user belongs to
+            // fetch the list of roles the specified user belongs to
             var roles = await _userManager.GetRolesAsync(user);
 
-            //Then remove all the assigned roles for this user
+            // Then remove all the assigned roles for this user
             var result = await _userManager.RemoveFromRolesAsync(user, roles);
 
             if (!result.Succeeded)
@@ -468,11 +455,10 @@ namespace MvcLibrary.Controllers
 
             List<string> RolesToBeAssigned = model.Where(x => x.IsSelected).Select(y => y.RoleName).ToList();
 
-            //If At least 1 Role is assigned, Any Method will return true
+            // If At least 1 Role is assigned, Any Method will return true
             if (RolesToBeAssigned.Any())
             {
-                //add a user to multiple roles simultaneously
-
+                // add a user to multiple roles simultaneously
                 result = await _userManager.AddToRolesAsync(user, RolesToBeAssigned);
                 if (!result.Succeeded)
                 {
@@ -480,7 +466,6 @@ namespace MvcLibrary.Controllers
                     return View(model);
                 }
             }
-
             return RedirectToAction("EditUser", new { UserId = UserId });
         }
     }

@@ -20,3 +20,25 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* Flex container that holds all content */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Main content area, with flex-grow to push footer to the bottom */
+.content {
+    flex: 1;
+}
+
+/* Footer should stick at the bottom */
+footer {
+    background: #f4f4f4;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
