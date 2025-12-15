@@ -7,37 +7,37 @@ An ASP.NET MVC web application simulating an online library system. Features use
 ## Screenshots
 
 ### Home Page (Featured Books)
-![Home Page with Featured Books](<img width="1886" height="639" alt="image" src="https://github.com/user-attachments/assets/8280bb79-5094-407c-b891-3e389e91d812" />)
+![Home Page with Featured Books](https://github.com/patrick-barber/LibraryWebApp/blob/master/Library%20Web%20App%20-%20Screenshots/home-featured.png)
 
 ### All Books Library View (with Filter/Sort)
-![Library Books List - Filtering and Sorting](<img width="1891" height="905" alt="image" src="https://github.com/user-attachments/assets/7b085cc5-e5af-4761-94a1-b30e2cae0440" />)
+![Library Books List - Filtering and Sorting](https://github.com/patrick-barber/LibraryWebApp/blob/master/Library%20Web%20App%20-%20Screenshots/Books-List.png)
 
 ### Book Details Page (Available Book)
-![Book Details - Checkout and Rating Options](<img width="1883" height="680" alt="image" src="https://github.com/user-attachments/assets/e089211d-7454-4394-a777-b394be7c6e94" />)
+![Book Details - Checkout and Rating Options](https://github.com/patrick-barber/LibraryWebApp/blob/master/Library%20Web%20App%20-%20Screenshots/book-details.png)
 
 ### Book Details Page (Checked Out Book)
-![Book Details - Due Date and Check-In (Admin)](<img width="1880" height="720" alt="image" src="https://github.com/user-attachments/assets/8b7d6f35-f3e7-41aa-8060-b85656ac1edb" />)
+![Book Details - Due Date and Check-In (Admin)](https://github.com/patrick-barber/LibraryWebApp/blob/master/Library%20Web%20App%20-%20Screenshots/checked-out-book.png)
 
 ### Rate Book Page
-![Rate Book Page](<img width="1881" height="469" alt="image" src="https://github.com/user-attachments/assets/30fb9ba3-c9e8-412a-8888-e12f932921eb" />)
+![Rate Book Page](https://github.com/patrick-barber/LibraryWebApp/blob/master/Library%20Web%20App%20-%20Screenshots/rate-book-page.png)
 
 ### Delete Book Page
-![Delete Book Page](<img width="1876" height="649" alt="image" src="https://github.com/user-attachments/assets/1698acbd-6ee1-4874-b096-819a31a010f6" />)
+![Delete Book Page](https://github.com/patrick-barber/LibraryWebApp/blob/master/Library%20Web%20App%20-%20Screenshots/delete-book-page.png)
 
 ### Registration and Login
-![Register Page with Role Selection](<img width="1887" height="652" alt="image" src="https://github.com/user-attachments/assets/8280d47e-2901-488c-89be-507057ad3afe" />)
+![Register Page with Role Selection](https://github.com/patrick-barber/LibraryWebApp/blob/master/Library%20Web%20App%20-%20Screenshots/register-page.png)
 
-![Login Page](<img width="1894" height="534" alt="image" src="https://github.com/user-attachments/assets/6f264ceb-2411-4bf5-a181-475724003150" />)
+![Login Page](https://github.com/patrick-barber/LibraryWebApp/blob/master/Library%20Web%20App%20-%20Screenshots/login-page.png)
 
 ### Checkout Process
-![Checking Out a Book](<img width="1889" height="716" alt="image" src="https://github.com/user-attachments/assets/ddf016ae-ab7e-4bbb-964b-8108c69f1a67" />)
+![Checking Out a Book](https://github.com/patrick-barber/LibraryWebApp/blob/master/Library%20Web%20App%20-%20Screenshots/checkout-process.png)
 
 ### Admin Features
-![Manage Users (Admin Only)](<img width="1886" height="623" alt="image" src="https://github.com/user-attachments/assets/ca3413f4-0d12-4f89-9875-d3205e5d1fd0" />)
+![Manage Users (Admin Only)](https://github.com/patrick-barber/LibraryWebApp/blob/master/Library%20Web%20App%20-%20Screenshots/manage-users.png)
 
-![Manage Roles (Admin Only)](<img width="1881" height="698" alt="image" src="https://github.com/user-attachments/assets/dc3ff83c-f1e8-4fc5-ab5f-35a184245d97" />)
+![Manage Roles (Admin Only)](https://github.com/patrick-barber/LibraryWebApp/blob/master/Library%20Web%20App%20-%20Screenshots/manage-roles.png)
 
-![Editing a Book (Admin)](<img width="1883" height="899" alt="image" src="https://github.com/user-attachments/assets/5c03f3f0-06de-4827-9474-1e7ef64ec269" />)
+![Editing a Book (Admin)](https://github.com/patrick-barber/LibraryWebApp/blob/master/Library%20Web%20App%20-%20Screenshots/editing-book.png)
 
 ---
 
